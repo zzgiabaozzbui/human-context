@@ -106,6 +106,8 @@ Also included: [`md-reader.html`](./md-reader.html) — the simpler single-file 
 
 ## 🤝 Contributing
 
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for setup notes, coding style, and the PR checklist.
+
 This is **one HTML file**. You can read the entire codebase in 30 minutes and understand every line. That's the point.
 
 If you've ever wanted to contribute to open source but felt intimidated by monorepos, build pipelines, and 47-step setup guides — this is for you.

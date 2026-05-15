@@ -1301,12 +1301,17 @@ function renderMarkdown(text) {
   // Wrap H2 sections into cards
   wrapSections(body);
 
-  // Heading IDs for TOC + anchor links (after wrapping)
-  body.querySelectorAll('h1,h2,h3,h4').forEach((h, i) => {
-    const slug = h.textContent.trim().toLowerCase()
-      .replace(/[^\w\sÀ-ɏḀ-ỿ]/g, '')
-      .replace(/\s+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '').slice(0, 60);
-    h.id = (slug || 'heading') + '-' + i;
+  // Heading IDs — GitHub-compatible: no strip leading dash, dedup with suffix only on collision
+  const slugCount = {};
+  body.querySelectorAll('h1,h2,h3,h4').forEach(h => {
+    const iconSpan = h.querySelector('.h-icon');
+    const rawText = iconSpan ? h.textContent.replace(iconSpan.textContent, '') : h.textContent;
+    const slug = rawText.trim().toLowerCase()
+      .replace(/[^\p{L}\p{N}\p{M}\s-]/gu, '')
+      .replace(/\s+/g, '-').replace(/-+/g, '-')
+      .slice(0, 60) || 'heading';
+    slugCount[slug] = (slugCount[slug] || 0) + 1;
+    h.id = slugCount[slug] === 1 ? slug : slug + '-' + (slugCount[slug] - 1);
   });
 
   // Syntax highlight
@@ -1359,7 +1364,20 @@ function onContentClick(e) {
   const a = e.target.closest('a');
   if (!a) return;
   const href = a.getAttribute('href') || '';
-  if (!href || href.startsWith('http') || href.startsWith('//') || href.startsWith('#')) return;
+  if (!href || href.startsWith('http') || href.startsWith('//')) return;
+
+  // In-page anchor link (e.g. TOC inside the .md file)
+  if (href.startsWith('#')) {
+    e.preventDefault();
+    const target = id('md-body').querySelector(CSS.escape(href.slice(1)) ? '#' + CSS.escape(href.slice(1)) : href);
+    if (target) {
+      const cp = id('content-panel');
+      const top = target.getBoundingClientRect().top + cp.scrollTop - cp.getBoundingClientRect().top - 8;
+      cp.scrollTo({ top, behavior: 'smooth' });
+    }
+    return;
+  }
+
   if (!/\.md(#.*)?$/i.test(href)) return;
   e.preventDefault();
 

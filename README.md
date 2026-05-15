@@ -11,7 +11,7 @@
 
 ---
 
-<video autoplay loop muted playsinline src="./demo.mp4" width="100%"></video>
+https://github.com/user-attachments/assets/34eefadc-edef-40b7-b56e-b54863e92087
 
 > *File tree with token counts · Frontmatter as metadata cards · TOC with scroll spy · Dark mode*
 

@@ -7,7 +7,7 @@
 [![No Build](https://img.shields.io/badge/build-none-lightgrey.svg)](https://github.com/zzgiabaozzbui/human-context)
 [![Single File](https://img.shields.io/badge/size-1%20file-orange.svg)](./md-folder-viewer.html)
 [![Last Commit](https://img.shields.io/github/last-commit/zzgiabaozzbui/human-context)](https://github.com/zzgiabaozzbui/human-context/commits/main)
-[![Viewer Size](https://img.shields.io/github/size/zzgiabaozzbui/human-context/md-folder-viewer.html?label=viewer%20size&color=informational)](./md-folder-viewer.html)
+[![Viewer Size](https://img.shields.io/github/size/zzgiabaozzbui/human-context/human-context/md-folder-viewer.html?label=viewer%20size&color=informational)](./md-folder-viewer.html)
 
 ---
 

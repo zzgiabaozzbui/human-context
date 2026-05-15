@@ -458,17 +458,17 @@ let currentLang = 'vi';
 // ── i18n ──
 const LANGS = {
   en: {
-    welcomeSub:    'Select your project folder to browse all .md files as a tree. Click any file to read it with a beautiful interface.',
+    welcomeSub:    'Select your project folder to browse .md, .txt, .rst, and .mdx files as a tree. Click any file to read it with a beautiful interface.',
     openFolder:    '📂 Open Folder',
     browserNote:   'Chrome / Edge: File System Access API · Firefox: file picker',
     browserWarn:   '⚠️ showDirectoryPicker not supported — using file picker fallback.',
-    pills:         ['🌲 File tree', '🎨 Syntax highlight', '🌙 Dark mode', '📋 TOC', '🔍 Search', '🔗 Cross-file nav'],
+    pills:         ['🌲 File tree', '📄 .md .txt .rst .mdx', '🎨 Syntax highlight', '🌙 Dark mode', '📋 TOC', '🔍 Search', '🔗 Cross-file nav'],
     searchPH:      'Search files...',
     openBtn:       '📂 Open folder',
     tocLabel:      'Contents',
     emptyTitle:    'Select a file to read',
-    emptySub:      'Click any .md file in the tree on the left',
-    noMdFiles:     'No .md files found',
+    emptySub:      'Click any file in the tree on the left',
+    noMdFiles:     'No supported files found',
     noResult:      q => `No results for "${q}"`,
     backToTop:     'Back to top',
     readTime:      n => `~${n} min read`,
@@ -484,17 +484,17 @@ const LANGS = {
     fileNotFound:  f => `File not found: ${f}`,
   },
   vi: {
-    welcomeSub:    'Chọn folder dự án để xem toàn bộ file .md dưới dạng cây. Click vào file để đọc với giao diện đẹp.',
+    welcomeSub:    'Chọn folder dự án để xem file .md, .txt, .rst, và .mdx dưới dạng cây. Click vào file để đọc với giao diện đẹp.',
     openFolder:    '📂 Mở Folder mới',
     browserNote:   'Chrome / Edge: dùng File System Access API · Firefox: dùng file picker',
     browserWarn:   '⚠️ Trình duyệt không hỗ trợ showDirectoryPicker — sẽ dùng file picker thay thế.',
-    pills:         ['🌲 File tree', '🎨 Syntax highlight', '🌙 Dark mode', '📋 TOC', '🔍 Tìm kiếm', '🔗 Cross-file nav'],
+    pills:         ['🌲 File tree', '📄 .md .txt .rst .mdx', '🎨 Syntax highlight', '🌙 Dark mode', '📋 TOC', '🔍 Tìm kiếm', '🔗 Cross-file nav'],
     searchPH:      'Tìm file...',
     openBtn:       '📂 Mở folder',
     tocLabel:      'Nội dung',
     emptyTitle:    'Chọn một file để đọc',
-    emptySub:      'Click vào file .md trong cây bên trái',
-    noMdFiles:     'Không có file .md nào',
+    emptySub:      'Click vào file trong cây bên trái',
+    noMdFiles:     'Không có file được hỗ trợ',
     noResult:      q => `Không tìm thấy "${q}"`,
     backToTop:     'Về đầu trang',
     readTime:      n => `~${n} phút đọc`,
@@ -785,7 +785,7 @@ function onDirInput(e) {
   files.forEach(f => {
     const parts = f.webkitRelativePath.split('/');
     if (!rootName) rootName = parts[0];
-    if (!/\.(md|markdown)$/i.test(f.name)) return;
+    if (!/\.(md|markdown|txt|rst|mdx)$/i.test(f.name)) return;
     // Skip if any path segment is in SKIP set
     if (parts.some(p => SKIP.has(p))) return;
     const relParts = parts.slice(1);
@@ -844,7 +844,7 @@ async function buildTree(dirHandle, parentPath) {
     if (handle.kind === 'directory') {
       const children = await buildTree(handle, path);
       if (children.length > 0) entries.push({ kind: 'dir', name, path: path + '/', handle, children, expanded: true });
-    } else if (/\.(md|markdown)$/i.test(name)) {
+    } else if (/\.(md|markdown|txt|rst|mdx)$/i.test(name)) {
       fileMap[path] = handle;
       entries.push({ kind: 'file', name, path, handle });
     }
@@ -953,6 +953,9 @@ function getIcon(name, kind, path) {
   if (n.includes('hook'))                                   return '🪝';
   if (n.includes('type'))                                   return '🔷';
   if (/^\d{2}-/.test(n))                                    return '📖';
+  if (n.endsWith('.txt'))                                   return '📃';
+  if (n.endsWith('.rst'))                                   return '📜';
+  if (n.endsWith('.mdx'))                                   return '📝';
   return '📄';
 }
 
@@ -1220,7 +1223,12 @@ async function loadFile(filePath) {
   // Update content-panel stats bar (top-right)
   renderCStats(stats);
 
-  renderMarkdown(text, filePath);
+  const ext = filePath.split('.').pop().toLowerCase();
+  if (ext === 'txt' || ext === 'rst') {
+    renderPlainText(text, filePath);
+  } else {
+    renderMarkdown(text, filePath);
+  }
   id('content-panel').scrollTo({ top: 0, behavior: 'instant' });
   if (window.innerWidth <= 720) id('tree-panel').classList.remove('mob-open');
 }
@@ -1280,6 +1288,28 @@ function renderFrontmatterCard(meta) {
     card.appendChild(row);
   });
   return card;
+}
+
+// ── Render plain text (for .txt / .rst files) ──
+function renderPlainText(text, filePath) {
+  const body = id('md-body');
+  body.style.opacity = '0';
+
+  const ext = (filePath || '').split('.').pop().toLowerCase();
+  const escaped = text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+
+  body.innerHTML = `<div class="md-intro">
+    <span style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em">${ext.toUpperCase()} — Plain Text</span>
+  </div>
+  <pre style="background:var(--code-bg);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.7;color:var(--text);">${escaped}</pre>`;
+
+  requestAnimationFrame(() => {
+    body.style.transition = 'opacity .18s';
+    body.style.opacity = '1';
+  });
 }
 
 // ── Render markdown ──

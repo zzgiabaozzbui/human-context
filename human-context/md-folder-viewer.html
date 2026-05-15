@@ -473,7 +473,7 @@ const LANGS = {
     backToTop:     'Back to top',
     readTime:      n => `~${n} min read`,
     files:         n => `${n} file${n !== 1 ? 's' : ''}`,
-    units:         { context: 'context', tokens: 'tokens', chars: 'chars' },
+    units:         { context: 'context', tokens: 'tokens', words: 'words', chars: 'chars' },
     checking:      name => `Checking "${name}"…`,
     opening:       name => `Opening "${name}"…`,
     reopenBtn:     name => `🔄 Reopen <span class="rp-name">${name}</span>`,
@@ -499,7 +499,7 @@ const LANGS = {
     backToTop:     'Về đầu trang',
     readTime:      n => `~${n} phút đọc`,
     files:         n => `${n} file${n !== 1 ? 's' : ''}`,
-    units:         { context: 'context', tokens: 'tokens', chars: 'chars' },
+    units:         { context: 'context', tokens: 'tokens', words: 'từ', chars: 'chars' },
     checking:      name => `Đang kiểm tra "${name}"…`,
     opening:       name => `Đang mở "${name}"…`,
     reopenBtn:     name => `🔄 Mở lại <span class="rp-name">${name}</span>`,
@@ -525,7 +525,7 @@ const LANGS = {
     backToTop:     '返回顶部',
     readTime:      n => `约 ${n} 分钟阅读`,
     files:         n => `${n} 个文件`,
-    units:         { context: '章节', tokens: '令牌', chars: '字符' },
+    units:         { context: '章节', tokens: '令牌', words: '词', chars: '字符' },
     checking:      name => `正在检查"${name}"…`,
     opening:       name => `正在打开"${name}"…`,
     reopenBtn:     name => `🔄 重新打开 <span class="rp-name">${name}</span>`,
@@ -853,7 +853,7 @@ async function buildTree(dirHandle, parentPath) {
 }
 
 // ── Context + token count ──
-const ctxCounts = {}; // filePath → { headings, tokens, chars }
+const ctxCounts = {}; // filePath → { headings, tokens, words, chars }
 
 function fmtNum(n) {
   if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
@@ -864,7 +864,9 @@ function computeStats(text) {
   const headings = (text.match(/^#{1,3} /mg) || []).length;
   const chars = text.length;
   const tokens = Math.ceil(chars / 4);
-  return { headings, tokens, chars };
+  const raw = parseFrontmatter(text).body;
+  const words = raw.trim().split(/\s+/).filter(Boolean).length;
+  return { headings, tokens, words, chars };
 }
 
 function updateTreeBadge(filePath, stats) {
@@ -872,10 +874,8 @@ function updateTreeBadge(filePath, stats) {
   if (!row) return;
   let badge = row.querySelector('.ctx-badge');
   if (!badge) { badge = document.createElement('span'); badge.className = 'ctx-badge'; row.appendChild(badge); }
-  // Show token count prominently; context count as secondary
-  const tokLabel = fmtNum(stats.tokens) + ' tok';
-  badge.textContent = tokLabel;
-  badge.title = fmtNum(stats.headings) + ' context · ' + fmtNum(stats.tokens) + ' tokens · ' + fmtNum(stats.chars) + ' chars';
+  badge.textContent = fmtNum(stats.tokens) + ' tok · ' + fmtNum(stats.words) + ' words';
+  badge.title = fmtNum(stats.tokens) + ' tokens · ' + fmtNum(stats.words) + ' words · ' + fmtNum(stats.headings) + ' headings · ' + fmtNum(stats.chars) + ' chars';
 }
 
 async function countCtx(filePath, handle) {
@@ -1165,6 +1165,7 @@ function renderCStats(stats) {
   cstats.innerHTML = `
     <div class="cst-chip"><span class="cst-icon">📊</span><span class="cst-num">${fmtNum(stats.headings)}</span><span class="cst-unit">${u.context}</span></div>
     <div class="cst-chip"><span class="cst-icon">🔤</span><span class="cst-num">${fmtNum(stats.tokens)}</span><span class="cst-unit">${u.tokens}</span></div>
+    <div class="cst-chip"><span class="cst-icon">✍️</span><span class="cst-num">${fmtNum(stats.words)}</span><span class="cst-unit">${u.words}</span></div>
     <div class="cst-chip"><span class="cst-icon">📝</span><span class="cst-num">${fmtNum(stats.chars)}</span><span class="cst-unit">${u.chars}</span></div>
   `;
 }
@@ -1207,15 +1208,14 @@ async function loadFile(filePath) {
     return `<span>${s}</span>`;
   }).join('<span class="bc-sep"> › </span>');
 
-  // Reading time
-  const words = text.trim().split(/\s+/).length;
-  id('rtime').textContent = t('readTime', Math.max(1, Math.round(words / 200)));
-  id('rtime').dataset.words = words;
-
   // Compute stats for this file (immediate — we already have text)
   const stats = computeStats(text);
   ctxCounts[filePath] = stats;
   updateTreeBadge(filePath, stats);
+
+  // Reading time
+  id('rtime').textContent = t('readTime', Math.max(1, Math.round(stats.words / 200)));
+  id('rtime').dataset.words = stats.words;
 
   // Update content-panel stats bar (top-right)
   renderCStats(stats);

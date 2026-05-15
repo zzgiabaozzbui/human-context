@@ -1121,10 +1121,17 @@ function el(tag, cls, text) {
 }
 
 // ── Search ──
+function debounce(fn, ms) {
+  let timer;
+  return (...args) => { clearTimeout(timer); timer = setTimeout(() => fn(...args), ms); };
+}
+
+const debouncedSearch = debounce(applySearch, 150);
+
 function onSearch(e) {
   const q = e.target.value.toLowerCase().trim();
   id('search-x').style.display = q ? 'block' : 'none';
-  applySearch(q);
+  debouncedSearch(q);
 }
 
 function clearSearch() {

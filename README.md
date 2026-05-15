@@ -36,20 +36,6 @@ https://github.com/user-attachments/assets/34eefadc-edef-40b7-b56e-b54863e92087
 
 ## 🧠 The Story
 
-You're context engineering. You have a `CLAUDE.md`. A `memory/` folder.
-A `docs/` directory with 40 files explaining every decision you've made.
-
-Your AI reads all of it. Perfectly.
-
-Then a teammate joins. They open the folder in VS Code.
-Raw markdown. No navigation. No idea what connects to what.
-
-Or you come back after two weeks. Same problem — except now it's your own docs.
-
-That's the gap.
-
----
-
 Context engineering is splitting into two schools of thought.
 
 **School A** says: everything should be `.md` — plain text, version-controlled, AI-readable, no fluff.
@@ -57,9 +43,13 @@ Context engineering is splitting into two schools of thought.
 
 Both are right. Both are incomplete. Most people pick a side. But children pick a side — **Adults take both.**
 
+---
+
 Your AI reads the `.md` files — your `CLAUDE.md`, your `memory/` folder, your `docs/`. But your teammates, your future self, your new hires — they need to *read* those files too, with actual eyes, in an actual browser, without squinting at raw markdown in VS Code.
 
 **human-context** is the missing half. A single `.html` file you drop into any project. Open it in Chrome, point it at your folder, and instantly get a proper reading experience for every `.md` file in your codebase.
+
+---
 
 No server. No `npm install`. No build step. **One file.**
 

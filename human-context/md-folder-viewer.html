@@ -452,7 +452,7 @@
 'use strict';
 
 // ── State ──
-let treeData = [], fileMap = {}, rootName = '', activePath = '', tocObserver = null;
+let treeData = [], fileMap = {}, rootName = '', activePath = '', focusedPath = '', tocObserver = null;
 let currentLang = 'vi';
 
 // ── i18n ──
@@ -563,6 +563,7 @@ function t(key, ...args) {
   id('btop').addEventListener('click', () => id('content-panel').scrollTo({ top: 0, behavior: 'smooth' }));
   id('dir-input').addEventListener('change', onDirInput);
   id('content-panel').addEventListener('scroll', onScroll);
+  document.addEventListener('keydown', onTreeKeydown);
 
   // Cross-file .md link navigation (event delegation)
   id('md-body').addEventListener('click', onContentClick);
@@ -1093,7 +1094,7 @@ function renderTree(nodes = treeData, container = id('tree-body'), depth = 0) {
       container.appendChild(wrap);
     } else {
       const row = document.createElement('div');
-      row.className = 'tf' + (node.path === activePath ? ' active' : '');
+      row.className = 'tf' + (node.path === (focusedPath || activePath) ? ' active' : '');
       row.dataset.path = node.path;
       row.style.paddingLeft = (depth * 13 + 6) + 'px';
       row.title = node.path;
@@ -1130,6 +1131,55 @@ function clearSearch() {
   id('search').value = '';
   id('search-x').style.display = 'none';
   applySearch('');
+}
+
+function onTreeKeydown(e) {
+  if (isTextEntryTarget(e.target)) return;
+
+  if (e.key === 'j') {
+    e.preventDefault();
+    moveTreeFocus(1);
+  } else if (e.key === 'k') {
+    e.preventDefault();
+    moveTreeFocus(-1);
+  } else if (e.key === 'Enter' && focusedPath) {
+    e.preventDefault();
+    loadFile(focusedPath);
+  }
+}
+
+function isTextEntryTarget(target) {
+  if (!target) return false;
+  const tag = target.tagName;
+  return target.isContentEditable || tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || tag === 'BUTTON' || tag === 'A';
+}
+
+function visibleFileRows() {
+  return Array.from(id('tree-body').querySelectorAll('.tf')).filter(row => row.getClientRects().length > 0);
+}
+
+function moveTreeFocus(delta) {
+  const rows = visibleFileRows();
+  if (rows.length === 0) return;
+
+  const current = focusedPath || activePath;
+  let index = rows.findIndex(row => row.dataset.path === current);
+  if (index === -1) index = delta > 0 ? -1 : rows.length;
+
+  const nextIndex = Math.max(0, Math.min(rows.length - 1, index + delta));
+  setTreeFocus(rows[nextIndex].dataset.path, true);
+}
+
+function setTreeFocus(filePath, scroll = false) {
+  focusedPath = filePath;
+  id('tree-body').querySelectorAll('.tf').forEach(row => {
+    row.classList.toggle('active', row.dataset.path === filePath);
+  });
+
+  if (scroll) {
+    const focusedRow = id('tree-body').querySelector(`.tf[data-path="${CSS.escape(filePath)}"]`);
+    if (focusedRow) focusedRow.scrollIntoView({ block: 'nearest' });
+  }
 }
 
 function applySearch(q) {
@@ -1192,15 +1242,11 @@ async function loadFile(filePath) {
   }
 
   activePath = filePath;
+  focusedPath = filePath;
   ls('mdv-last-' + rootName, filePath);
 
   // Update active in tree
-  id('tree-body').querySelectorAll('.tf').forEach(r => {
-    r.classList.toggle('active', r.dataset.path === filePath);
-  });
-  // Scroll active into view
-  const activeRow = id('tree-body').querySelector('.tf.active');
-  if (activeRow) activeRow.scrollIntoView({ block: 'nearest' });
+  setTreeFocus(filePath, true);
 
   // Breadcrumb
   const parts = filePath.split('/');

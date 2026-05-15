@@ -139,7 +139,7 @@ If you improve it — please push back. That's how this gets better for everyone
 
 These are things not yet built. Any of them would make a great PR — [claim one in Issues](https://github.com/zzgiabaozzbui/human-context/issues):
 
-- [ ] **Keyboard navigation** (`j` / `k` to move between files) — make it feel like a real IDE
+- [x] **Keyboard navigation** (`j` / `k` to move between files) — make it feel like a real IDE
 - [ ] **Support `.txt`, `.rst`, `.mdx`** — extend beyond markdown
 - [ ] **Export folder as a static site** — offline-ready HTML bundle, shareable without a server
 - [ ] **Print / PDF mode** — formatted output for documentation handoff

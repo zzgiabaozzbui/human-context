@@ -88,7 +88,7 @@ That's it. Your folder becomes a navigable knowledge base.
 ## ✨ Features
 
 - **🌲 File tree** — auto icons by filename and folder, collapsible
-- **📊 Token counts** — per-file token / char / heading stats in the tree and content panel
+- **📊 Token and word counts** — per-file token / word / char / heading stats in the tree and content panel
 - **🃏 Frontmatter cards** — YAML `---` blocks rendered as structured metadata, not raw text
 - **🎨 Syntax highlighting** — via highlight.js, light and dark themes
 - **📋 Table of contents** — auto-generated, scroll spy, smooth scroll
@@ -143,7 +143,7 @@ These are things not yet built. Any of them would make a great PR — [claim one
 - [ ] **Support `.txt`, `.rst`, `.mdx`** — extend beyond markdown
 - [ ] **Export folder as a static site** — offline-ready HTML bundle, shareable without a server
 - [ ] **Print / PDF mode** — formatted output for documentation handoff
-- [ ] **Word count alongside token count** — more writing-friendly stats
+- [x] **Word count alongside token count** — more writing-friendly stats
 - [ ] **Customizable icon sets** — bring your own emoji map per project
 - [ ] **Inline image support** — render local `./images/*.png` inside content
 - [ ] **Better mobile experience** — swipe gestures, full-screen reading mode

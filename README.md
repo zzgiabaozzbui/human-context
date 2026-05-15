@@ -40,7 +40,7 @@ Context engineering is splitting into two schools of thought.
 **School A** says: everything should be `.md` — plain text, version-controlled, AI-readable, no fluff.
 **School B** says: humans need a real UI — navigable, searchable, beautiful, with syntax highlighting and a table of contents.
 
-Both are right. Both are incomplete. Most people pick a side. **Adults pick both.**
+Both are right. Both are incomplete. Most people pick a side. But children pick a side — **Adults take both.**
 
 Your AI reads the `.md` files — your `CLAUDE.md`, your `memory/` folder, your `docs/`. But your teammates, your future self, your new hires — they need to *read* those files too, with actual eyes, in an actual browser, without squinting at raw markdown in VS Code.
 

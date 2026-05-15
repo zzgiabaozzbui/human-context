@@ -69,6 +69,14 @@ Because they require you to **move your files there**.
 
 ## ⚡ Quick Start
 
+**Option A — one-liner (Mac/Linux):**
+
+```bash
+curl -O https://raw.githubusercontent.com/zzgiabaozzbui/human-context/main/human-context/md-folder-viewer.html
+```
+
+**Option B — manual:**
+
 **1.** Download [`md-folder-viewer.html`](./md-folder-viewer.html)
 
 **2.** Open it in Chrome or Edge (double-click the file)
@@ -410,3 +418,9 @@ md-folder-viewer.html
 ---
 
 Made by [chillchill](https://github.com/zzgiabaozzbui) · [⭐ Star if useful](https://github.com/zzgiabaozzbui/human-context) · [🐛 Report a bug](https://github.com/zzgiabaozzbui/human-context/issues/new)
+
+---
+
+## ⭐ Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=zzgiabaozzbui/human-context&type=Date)](https://star-history.com/#zzgiabaozzbui/human-context&Date)

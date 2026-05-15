@@ -1,0 +1,41 @@
+# human-context
+
+> A single HTML file that turns any folder of Markdown docs into a navigable knowledge base. No server, no npm install, no build step. Files stay in your repo.
+
+## What it does
+
+Drop `md-folder-viewer.html` into any project. Open it in Chrome or Edge, point it at your folder, and get: file tree with token counts, syntax highlighting, TOC with scroll spy, cross-file navigation, dark mode, and multilingual UI (EN / Tiếng Việt / 中文). Nothing is uploaded — everything runs client-side.
+
+## Source files
+
+- [Full viewer source](https://raw.githubusercontent.com/zzgiabaozzbui/human-context/main/md-folder-viewer.html): `md-folder-viewer.html` — the main tool, one self-contained HTML file, all logic inside
+- [Simple reader](https://raw.githubusercontent.com/zzgiabaozzbui/human-context/main/md-reader.html): `md-reader.html` — drag-and-drop single-file version, no folder needed
+- [README](https://raw.githubusercontent.com/zzgiabaozzbui/human-context/main/README.md): full documentation, quick start, feature list, roadmap
+
+## How it works
+
+```
+md-folder-viewer.html
+├── File System Access API  → showDirectoryPicker() [Chrome/Edge]
+├── webkitdirectory input   → fallback for Firefox
+├── marked.js (CDN)         → markdown parsing
+├── highlight.js (CDN)      → syntax highlighting
+├── IndexedDB               → folder handle persistence across sessions
+└── CSS custom properties   → full light/dark design system, no framework
+```
+
+## Quick start
+
+1. Download `md-folder-viewer.html`
+2. Open in Chrome or Edge (double-click)
+3. Click **Open Folder** → select your project folder
+
+Or via curl:
+
+```bash
+curl -O https://raw.githubusercontent.com/zzgiabaozzbui/human-context/main/md-folder-viewer.html
+```
+
+## Optional: full content for AI
+
+All readable content in one file: https://raw.githubusercontent.com/zzgiabaozzbui/human-context/main/llms-full.txt

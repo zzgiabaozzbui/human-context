@@ -8,6 +8,7 @@
 [![Single File](https://img.shields.io/badge/size-1%20file-orange.svg)](./md-folder-viewer.html)
 [![Last Commit](https://img.shields.io/github/last-commit/zzgiabaozzbui/human-context)](https://github.com/zzgiabaozzbui/human-context/commits/main)
 [![Viewer Size](https://img.shields.io/github/size/zzgiabaozzbui/human-context/human-context/md-folder-viewer.html?label=viewer%20size&color=informational)](./md-folder-viewer.html)
+[![llms.txt](https://img.shields.io/badge/llms.txt-ready-blueviolet)](./llms.txt)
 
 ---
 
@@ -189,7 +190,15 @@ If you've ever wanted to contribute to open source but felt intimidated by monor
 
 No tests to run. No CI to wait for. No environment to set up.
 
-Browse [`good first issues`](https://github.com/zzgiabaozzbui/human-context/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) to find something ready to pick up.
+**Ready-to-pick issues** (fully described, self-contained):
+
+| Issue | Difficulty | What |
+| --- | --- | --- |
+| [#19 — no feedback when 0 .md files found](https://github.com/zzgiabaozzbui/human-context/issues/19) | Easy (~5 lines) | Show message when folder has no markdown |
+| [#26 — copy anchor link on heading hover](https://github.com/zzgiabaozzbui/human-context/issues/26) | Easy | Add 🔗 button like GitHub headings |
+| [#24 — keyboard shortcut help overlay](https://github.com/zzgiabaozzbui/human-context/issues/24) | Easy | Press `?` to see all shortcuts |
+| [#33 — dark mode WCAG AA contrast](https://github.com/zzgiabaozzbui/human-context/issues/33) | Easy | CSS-only, no JS |
+| [#22 — full-text search across all files](https://github.com/zzgiabaozzbui/human-context/issues/22) | Medium | Search inside file content, not just names |
 
 If you improve it — please push back. That's how this gets better for everyone.
 

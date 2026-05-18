@@ -11,9 +11,11 @@
 
 ---
 
-https://github.com/user-attachments/assets/34eefadc-edef-40b7-b56e-b54863e92087
+[▶ Watch demo](./readme-files/demo.mp4)
 
 > *File tree with token counts · Frontmatter as metadata cards · TOC with scroll spy · Dark mode*
+
+![Screenshot](./readme-files/screenshot.png)
 
 ---
 

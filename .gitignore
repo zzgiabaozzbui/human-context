@@ -1,0 +1,14 @@
+# Claude Code
+.claude/
+
+# Playwright MCP logs
+.playwright-mcp/
+
+# Claude project memory (local workspace only)
+CLAUDE.md
+
+# AI session logs
+docs/history/
+
+# Draft files (screenshots, working images, temp exports)
+drafts/

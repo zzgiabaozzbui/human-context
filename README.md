@@ -12,13 +12,11 @@
 
 ---
 
-https://github.com/user-attachments/assets/34eefadc-edef-40b7-b56e-b54863e92087
+<video src="https://raw.githubusercontent.com/zzgiabaozzbui/human-context/main/readme-files/demo.mp4" controls width="100%"></video>
 
 > *File tree with token counts · Frontmatter as metadata cards · TOC with scroll spy · Dark mode*
 
 ![Screenshot](./readme-files/screenshot.png)
-
-> [Download demo video](./readme-files/demo.mp4)
 
 ---
 
